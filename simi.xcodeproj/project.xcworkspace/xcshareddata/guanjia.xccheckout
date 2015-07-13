@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>2B1F3F11-D000-416B-854B-AF79BCB6F6D7</string>
+	<key>IDESourceControlProjectName</key>
+	<string>guanjia</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>455FC5C6F881A643D0C537C210996CA9E37EB707</key>
+		<string>https://github.com/zhirunjia/guanjia.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>guanjia.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>455FC5C6F881A643D0C537C210996CA9E37EB707</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/zhirunjia/guanjia.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>455FC5C6F881A643D0C537C210996CA9E37EB707</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>455FC5C6F881A643D0C537C210996CA9E37EB707</string>
+			<key>IDESourceControlWCCName</key>
+			<string>guanjia</string>
+		</dict>
+	</array>
+</dict>
+</plist>
