@@ -617,7 +617,7 @@
     }
     if (btn.tag == 303) {
         [self zhezhao];
-        
+        NSLog(@"日期");
         datePicker = [[DatePicker alloc]initWithFrame:FRAME(0, SELF_VIEW_HEIGHT, SELF_VIEW_WIDTH, 250)];
         datePicker.delegate = self;
 //        datePicker.backgroundColor = [UIColor grayColor];

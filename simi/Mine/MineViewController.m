@@ -34,6 +34,7 @@
     UIScrollView *_myscroll;
     float _height;
     UIImageView *image;
+    
 }
 
 @end
@@ -41,8 +42,57 @@
 @implementation MineViewController
 - (void)viewWillAppear:(BOOL)animated
 {
-    UIImage *headimg = [GetPhoto getPhotoFromName:@"image.png"];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+     NSLog(@"有没有啊   啊 啊啊 啊 啊%@",[[EaseMob sharedInstance] sdkVersion]);
+    ISLoginManager *_manager = [ISLoginManager shareManager];
+    if (_manager.isLogin) {
+        UIImage *headimg = [GetPhoto getPhotoFromName:@"image.png"];
+        UIImageView *image1 = (UIImageView *)[image viewWithTag:66];
+        if (headimg) {
+            image1.image = headimg;
+            image1.frame = FRAME((SELF_VIEW_WIDTH-50)/2, 15, 50, 50);
+            image1.backgroundColor=[UIColor redColor];
+        }else{
+            image1.image = [UIImage imageNamed:@"家-我_默认头像"];
+            image1.frame = FRAME((SELF_VIEW_WIDTH-50)/2, 15, 50, 50);;
+        }
 
+    }else{
+        UIImage *headimg =nil; //[GetPhoto getPhotoFromName:@"image.png"];
+        UIImageView *image1 = (UIImageView *)[image viewWithTag:66];
+        if (headimg) {
+            image1.image = headimg;
+            image1.frame = FRAME((SELF_VIEW_WIDTH-50)/2, 15, 50, 50);
+        }else{
+            image1.image = [UIImage imageNamed:@"家-我_默认头像"];
+            image1.frame = FRAME((SELF_VIEW_WIDTH-50)/2, 15, 50, 50);;
+        }
+    }
+    
+}
+
+- (void)LoginSuccess1:(NSNotification *)noti
+{
+    
+    userlabel.text = [NSString stringWithFormat:@"%@",noti.object];
+    
+    NSLog(@"userlabel.text!!!!!!!!%@",userlabel.text);
+       [self getjifen:[NSString stringWithFormat:@"%@",noti.object]];
+        userlabel.font = [UIFont fontWithName:@"Georgia-Bold" size:20];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"THIRD_LOGIN_SUCCESS" object:nil];
+
+}
+-(void)tongzhiNA:(NSNotification *)dic
+{
+    NSString *st=[NSString stringWithFormat:@"%@",[dic.object objectForKey:@"name"]];
+    userlabel.text=st;
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"TONG_ZHI" object:nil];
+    NSLog(@"获取到的饿数据%@",st);
+}
+- (void)Logout
+{
+    UIImage *headimg = nil;//[GetPhoto getPhotoFromName:@"image.png"];
+    
     UIImageView *image1 = (UIImageView *)[image viewWithTag:66];
     if (headimg) {
         image1.image = headimg;
@@ -51,24 +101,7 @@
         image1.image = [UIImage imageNamed:@"家-我_默认头像"];
         image1.frame = FRAME((SELF_VIEW_WIDTH-50)/2, 15, 50, 50);;
     }
-    ISLoginManager *_manager = [ISLoginManager shareManager];
-
-    if (_manager.isLogin) {
-        NSLog(@"%@",_manager.telephone);
-        [self getjifen:_manager.telephone];
-    }
-}
-- (void)LoginSuccess1:(NSNotification *)noti
-{
-    
-    userlabel.text = [NSString stringWithFormat:@"%@",noti.object];
-        [self getjifen:[NSString stringWithFormat:@"%@",noti.object]];
-        userlabel.font = [UIFont fontWithName:@"Georgia-Bold" size:20];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"THIRD_LOGIN_SUCCESS" object:nil];
-
-}
-- (void)Logout
-{
+    //[image removeFromSuperview];
     userlabel.text = @"立即登录";
     UILabel *_label = (UILabel *)[_myscroll viewWithTag:909];
     _label.text = @"0.0";
@@ -95,7 +128,7 @@
     _base = [[USERINFOBaseClass alloc]initWithDictionary:responsobject];
     NSDictionary *dict = [responsobject objectForKey:@"data"];
 
-    
+    NSLog(@"下载成功的数据%@",dict);
     if (_base.status == 0) {
         UILabel *_label = (UILabel *)[_myscroll viewWithTag:909];
         _label.text = [NSString stringWithFormat:@"%.f",_base.data.score];
@@ -112,7 +145,7 @@
         self.ID = [dict objectForKey:@"id"];
         self.hxUserName = [dict objectForKey:@"im_username"];
         self.hxPassword = [dict objectForKey:@"im_password"];
-        NSLog(@"环信账号：%@环信密码：%@",self.hxUserName,self.hxPassword);
+        NSLog(@"？？？？？？环信账号：%@环信密码：%@",self.hxUserName,self.hxPassword);
         
         self.imToUserID = [dict objectForKey:@"im_sec_username"];
         self.imToUserName = [dict objectForKey:@"im_sec_nickname"];
@@ -130,10 +163,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navlabel.text = @"我的";
-    self.backBtn.hidden = YES;
+    //self.backBtn.hidden = YES;
     self.navigationController.navigationBarHidden = YES;
 
-    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tongzhiNA:) name:@"TONG_ZHI" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(Logout) name:@"LOGOUT" object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(LoginSuccess1:) name:@"THIRD_LOGIN_SUCCESS" object:nil];
@@ -173,14 +206,19 @@
 //    image1.backgroundColor = [UIColor redColor];
 
     [image addSubview:image1];
-    
+   
     ISLoginManager *_manager = [ISLoginManager shareManager];
+//    ISLoginManager *_manager = [ISLoginManager shareManager];
     
+    if (_manager.isLogin) {
+        NSLog(@"%@",_manager.telephone);
+        [self getjifen:_manager.telephone];
+    }
     userlabel = [[UILabel alloc]initWithFrame:FRAME(126/2+47/2, image.height-47/2-10, 150, 47/2)];
     userlabel.textAlignment = NSTextAlignmentCenter;
     userlabel.textColor = HEX_TO_UICOLOR(0x666666, 1.0);
     if (_manager.isLogin) {
-        userlabel.text = [NSString stringWithFormat:@"%@",_manager.telephone];
+        userlabel.text =[NSString stringWithFormat:@"%@",_manager.telephone];
         userlabel.font = [UIFont fontWithName:@"Georgia-Bold" size:20];
     }else
     {
@@ -204,7 +242,7 @@
     UIButton *_headBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _headBtn.frame = FRAME(0, 64-_height, _WIDTH, 176/2+20);
     [_headBtn setTag:1];
-    [_headBtn addTarget:self action:@selector(oneAction:) forControlEvents:UIControlEventTouchUpInside];
+    //[_headBtn addTarget:self action:@selector(oneAction:) forControlEvents:UIControlEventTouchUpInside];
     [_myscroll addSubview:_headBtn];
     
     
@@ -238,9 +276,11 @@
     viewTwo.backgroundColor = HEX_TO_UICOLOR(CHOICE_BACK_VIEW_COLOR, 1.0);
     [_myscroll addSubview:viewTwo];
     
-    NSArray *titleArr = @[@"订单",@"充值",@"积分",@"优惠券",@"私秘卡",@"更多"];
-    NSArray *imgArr = @[@"家-我_订单",@"家-我_充值（会员卡）",@"家-我_积分",@"家-我_优惠券",@"家-我_私密卡",@"家-我_更多"];
-    for (int i = 0; i < 6; i++) {
+//    NSArray *titleArr = @[@"订单",@"充值",@"积分",@"优惠券",@"私秘卡",@"更多"];
+    NSArray *titleArr = @[@"订单",@"充值",@"积分",@"优惠券",@"更多"];
+    //NSArray *imgArr = @[@"家-我_订单",@"家-我_充值（会员卡）",@"家-我_积分",@"家-我_优惠券",@"家-我_私密卡",@"家-我_更多"];
+    NSArray *imgArr = @[@"家-我_订单",@"家-我_充值（会员卡）",@"家-我_积分",@"家-我_优惠券",@"家-我_更多"];
+    for (int i = 0; i < titleArr.count; i++) {
         UIButton *btn = [[UIButton alloc]initWithFrame:FRAME(0, 0.5+((108/2+0.5)*i), SELF_VIEW_WIDTH, 108/2)];
         btn.backgroundColor = [UIColor whiteColor];
         [btn addTarget:self action:@selector(oneAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -291,6 +331,7 @@
     
 
 }
+
 - (void)oneAction:(UIButton *)sennder
 {
     ISLoginManager *_logmanager = [ISLoginManager shareManager];
@@ -379,30 +420,38 @@
         
     }else if (sennder.tag == 7)
     {
-        if (_logmanager.isLogin) {
-            simiViewController *_controller = [[simiViewController alloc]init];
-            [self.navigationController pushViewController:_controller animated:YES];
-            
-        }else{
-            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
-//            [self presentViewController:userinfo animated:YES completion:nil];
-            [self.navigationController pushViewController:userinfo animated:YES];
+//        if (_logmanager.isLogin) {
+//            simiViewController *_controller = [[simiViewController alloc]init];
+//            [self.navigationController pushViewController:_controller animated:YES];
+//            
+//        }else{
+//            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
+////            [self presentViewController:userinfo animated:YES completion:nil];
+//            [self.navigationController pushViewController:userinfo animated:YES];
 
-        }
-    }
-    else if (sennder.tag == 8)
-    {
         if (_logmanager.isLogin) {
             MoreViewController *more = [[MoreViewController alloc]init];
             [self.navigationController pushViewController:more animated:YES];
             
         }else{
             MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
-//            [self presentViewController:userinfo animated:YES completion:nil];
+            //            [self presentViewController:userinfo animated:YES completion:nil];
             [self.navigationController pushViewController:userinfo animated:YES];
-
         }
     }
+//    else if (sennder.tag == 8)
+//    {
+//        if (_logmanager.isLogin) {
+//            MoreViewController *more = [[MoreViewController alloc]init];
+//            [self.navigationController pushViewController:more animated:YES];
+//            
+//        }else{
+//            MyLogInViewController *userinfo = [[MyLogInViewController alloc]init];
+////            [self presentViewController:userinfo animated:YES completion:nil];
+//            [self.navigationController pushViewController:userinfo animated:YES];
+//
+//        }
+//    }
 }
 
 - (void)didReceiveMemoryWarning {

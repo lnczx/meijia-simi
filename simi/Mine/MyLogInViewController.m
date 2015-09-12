@@ -20,6 +20,8 @@
 #import "MineViewController.h"
 #import "LoginViewController.h"
 #import "ChatViewController.h"
+#import "RootViewController.h"
+
 @interface MyLogInViewController ()
 <
 UITextFieldDelegate,
@@ -35,6 +37,7 @@ appDelegate
     NSTimer *countDownTimer;
     UITextField *textField;
     
+    int wxID;
     
 }
 @end
@@ -55,6 +58,7 @@ appDelegate
 }
 - (void)viewWillAppear:(BOOL)animated
 {
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(back) name:@"WEIXINDENGLU_CG" object:nil];
     if (self.loginYesOrNo == YES) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGIN_SUCCESS" object:nil];
 
@@ -62,158 +66,166 @@ appDelegate
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
+    wxID=0;
+   // super.backBtn.hidden=YES;
     
     if (self.loginYesOrNo == YES) {
         [self pushToIM];
-    }
-    
-    
-    
-    secondsDown = 60;
-    
-    self.navlabel.text = @"登录";
-    self.backBtn.hidden = YES;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(back) name:@"MylogVcBack" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToIM) name:@"PUSHTOCHAT" object:nil];
-    
-    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    //    [_backBtn setTitle:@"返回" forState:UIControlStateNormal];
-    [backBtn setImage:[UIImage imageNamed:@"nav-arrow"] forState:UIControlStateNormal];
-    backBtn.titleLabel.font = [UIFont systemFontOfSize:12];
-    backBtn.frame = FRAME(18, 25, 40, 30);
-    [backBtn setImageEdgeInsets:UIEdgeInsetsMake(5, 10, 5, 10)];  //17/2   16
-    [backBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backBtn];
-    
-    view = [[UIView alloc]initWithFrame:FRAME(0, NAV_HEIGHT+9, SELF_VIEW_WIDTH, 1.5+108)];
-    view.backgroundColor = HEX_TO_UICOLOR(CHOICE_BACK_VIEW_COLOR, 1.0);
-    [self.view addSubview:view];
-    
-    
-    for (int i = 0; i < 2; i++) {
-        UIView *vie = [[UIView alloc]initWithFrame:FRAME(0, 0.5+(108/2*i+i*0.5), SELF_VIEW_WIDTH, 108/2)];
-        vie.backgroundColor = HEX_TO_UICOLOR(0xFFFFFF, 1.0);
-        [view addSubview:vie];
+        RootViewController *vc=[[RootViewController alloc]init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }else{
+        secondsDown = 60;
         
-        textField = [[UITextField alloc]initWithFrame:FRAME(10, 0.5+(108/2*i+i*0.5), SELF_VIEW_WIDTH, 108/2)];
-        textField.backgroundColor = HEX_TO_UICOLOR(0xFFFFFF, 1.0);
-        textField.delegate = self;
-        textField.tag = 100+i;
-        [view addSubview:textField];
+        self.navlabel.text = @"登录";
+        self.backBtn.hidden = YES;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(back) name:@"MylogVcBack" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToIM) name:@"PUSHTOCHAT" object:nil];
         
-    }
-    
-    for (UIView *view1 in view.subviews) {
-        if ([view1 isKindOfClass:[UITextField class]]) {
-            if (view1.tag == 100) {
-                [(UITextField *)view1 setPlaceholder:@"在此输入您的手机号"];
-            }
-            else if (view1.tag == 101) {
-                [(UITextField *)view1 setPlaceholder:@"请输入验证码"];
-                
-                noGetbtn = [[UIButton alloc]initWithFrame:FRAME(SELF_VIEW_WIDTH - 18 - 162/2-10, 9, 162/2+10, 108/2-18)];
-                [noGetbtn setTitle:@"没有收到？" forState:UIControlStateNormal];
-                [noGetbtn setBackgroundColor:DEFAULT_COLOR];
-                [noGetbtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-                [noGetbtn.layer setCornerRadius:5.0];
-                noGetbtn.titleLabel.font = [UIFont systemFontOfSize:13];
-                [noGetbtn addTarget:self action:@selector(meishoudao:) forControlEvents:UIControlEventTouchUpInside];
-                [view1 addSubview:noGetbtn];
-                noGetbtn.hidden = YES;
-                view1.userInteractionEnabled = YES;
+        //    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        //    //    [_backBtn setTitle:@"返回" forState:UIControlStateNormal];
+        //    [backBtn setImage:[UIImage imageNamed:@"nav-arrow"] forState:UIControlStateNormal];
+        //    backBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+        //    backBtn.frame = FRAME(18, 25, 40, 30);
+        //    [backBtn setImageEdgeInsets:UIEdgeInsetsMake(5, 10, 5, 10)];  //17/2   16
+        //    [backBtn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
+        //    [self.view addSubview:backBtn];
+        
+        view = [[UIView alloc]initWithFrame:FRAME(0, NAV_HEIGHT+9, SELF_VIEW_WIDTH, 1.5+108)];
+        view.backgroundColor = HEX_TO_UICOLOR(CHOICE_BACK_VIEW_COLOR, 1.0);
+        [self.view addSubview:view];
+        
+        
+        for (int i = 0; i < 2; i++) {
+            UIView *vie = [[UIView alloc]initWithFrame:FRAME(0, 0.5+(108/2*i+i*0.5), SELF_VIEW_WIDTH, 108/2)];
+            vie.backgroundColor = HEX_TO_UICOLOR(0xFFFFFF, 1.0);
+            [view addSubview:vie];
+            
+            textField = [[UITextField alloc]initWithFrame:FRAME(10, 0.5+(108/2*i+i*0.5), SELF_VIEW_WIDTH, 108/2)];
+            textField.backgroundColor = HEX_TO_UICOLOR(0xFFFFFF, 1.0);
+            textField.delegate = self;
+            textField.tag = 100+i;
+            [view addSubview:textField];
+            
+        }
+        
+        for (UIView *view1 in view.subviews) {
+            if ([view1 isKindOfClass:[UITextField class]]) {
+                if (view1.tag == 100) {
+                    [(UITextField *)view1 setPlaceholder:@"在此输入您的手机号"];
+                }
+                else if (view1.tag == 101) {
+                    [(UITextField *)view1 setPlaceholder:@"请输入验证码"];
+                    
+                    noGetbtn = [[UIButton alloc]initWithFrame:FRAME(SELF_VIEW_WIDTH - 18 - 162/2-10, 9, 162/2+10, 108/2-18)];
+                    [noGetbtn setTitle:@"没有收到？" forState:UIControlStateNormal];
+                    [noGetbtn setBackgroundColor:DEFAULT_COLOR];
+                    [noGetbtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+                    [noGetbtn.layer setCornerRadius:5.0];
+                    noGetbtn.titleLabel.font = [UIFont systemFontOfSize:13];
+                    [noGetbtn addTarget:self action:@selector(meishoudao:) forControlEvents:UIControlEventTouchUpInside];
+                    [view1 addSubview:noGetbtn];
+                    noGetbtn.hidden = YES;
+                    view1.userInteractionEnabled = YES;
+                }
             }
         }
-    }
-    
-    btn = [[UIButton alloc]initWithFrame:FRAME(SELF_VIEW_WIDTH - 18 - 162/2-10, 9, 162/2+10, 108/2-18)];
-    [btn setTitle:@"获取验证码" forState:UIControlStateNormal];
-    [btn setBackgroundColor:HEX_TO_UICOLOR(NAV_COLOR, 1.0)];
-    [btn.layer setCornerRadius:5.0];
-    btn.titleLabel.font = [UIFont systemFontOfSize:13];
-    [btn addTarget:self action:@selector(yanzheng:) forControlEvents:UIControlEventTouchUpInside];
-    [view addSubview:btn];
-    
-    // Do any additional setup after loading the view.
-    UIButton *bttn = [UIButton buttonWithType:UIButtonTypeCustom];
-    bttn.frame = FRAME(14, NAV_HEIGHT+9+14+108+1.5, 584/2, 108/2);
-    [bttn setBackgroundColor:HEX_TO_UICOLOR(TEXT_COLOR, 1.0)];
-    [bttn setTitle:@"登录" forState:UIControlStateNormal];
-    [bttn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [bttn addTarget:self action:@selector(sureAction:) forControlEvents:UIControlEventTouchUpInside];
-//    [bttn.layer setCornerRadius:5.0];//设置矩形四个圆角半径
-    [self.view addSubview:bttn];
-    
-    UILabel *xieyiLab = [[UILabel alloc]initWithFrame:FRAME(14, bttn.bottom+8, 584/2, 20)];
-//    xieyiLab.text = @"点击“登录”，即表示您同意《有个管家使用协议》";
-    xieyiLab.textAlignment = NSTextAlignmentLeft;
-    xieyiLab.font = [UIFont systemFontOfSize:12];
-    
-    NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc] initWithString:@"点击“登录”，即表示您同意《私秘使用协议》"];
-    [text1 setAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor blueColor],NSForegroundColorAttributeName, nil] range:NSMakeRange(13, 8)];
-    xieyiLab.attributedText = text1;
-    [self.view addSubview:xieyiLab];
-    
-    xieyiLab.userInteractionEnabled = YES;
-    UITapGestureRecognizer *xieyiTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(XieYiAction)];
-    [xieyiLab addGestureRecognizer:xieyiTap];
-    
-    UITapGestureRecognizer *first = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(viewAction)];
-    [self.view addGestureRecognizer:first];
+        
+        btn = [[UIButton alloc]initWithFrame:FRAME(SELF_VIEW_WIDTH - 18 - 162/2-10, 9, 162/2+10, 108/2-18)];
+        [btn setTitle:@"获取验证码" forState:UIControlStateNormal];
+        [btn setBackgroundColor:HEX_TO_UICOLOR(NAV_COLOR, 1.0)];
+        [btn.layer setCornerRadius:5.0];
+        btn.titleLabel.font = [UIFont systemFontOfSize:13];
+        [btn addTarget:self action:@selector(yanzheng:) forControlEvents:UIControlEventTouchUpInside];
+        [view addSubview:btn];
+        
+        // Do any additional setup after loading the view.
+        UIButton *bttn = [UIButton buttonWithType:UIButtonTypeCustom];
+        bttn.frame = FRAME(14, NAV_HEIGHT+9+14+108+1.5, 584/2, 108/2);
+        [bttn setBackgroundColor:HEX_TO_UICOLOR(TEXT_COLOR, 1.0)];
+        [bttn setTitle:@"登录" forState:UIControlStateNormal];
+        [bttn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [bttn addTarget:self action:@selector(sureAction:) forControlEvents:UIControlEventTouchUpInside];
+        //    [bttn.layer setCornerRadius:5.0];//设置矩形四个圆角半径
+        [self.view addSubview:bttn];
+        
+        UILabel *xieyiLab = [[UILabel alloc]initWithFrame:FRAME(14, bttn.bottom+8, 584/2, 20)];
+        //    xieyiLab.text = @"点击“登录”，即表示您同意《有个管家使用协议》";
+        xieyiLab.textAlignment = NSTextAlignmentLeft;
+        xieyiLab.font = [UIFont systemFontOfSize:12];
+        
+        NSMutableAttributedString *text1 = [[NSMutableAttributedString alloc] initWithString:@"点击“登录”，即表示您同意《私秘使用协议》"];
+        [text1 setAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor blueColor],NSForegroundColorAttributeName, nil] range:NSMakeRange(13, 8)];
+        xieyiLab.attributedText = text1;
+        [self.view addSubview:xieyiLab];
+        
+        xieyiLab.userInteractionEnabled = YES;
+        UITapGestureRecognizer *xieyiTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(XieYiAction)];
+        [xieyiLab addGestureRecognizer:xieyiTap];
+        
+        UITapGestureRecognizer *first = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(viewAction)];
+        [self.view addGestureRecognizer:first];
 #pragma mark 微信登录  qq登陆  新浪登陆
-    
-    UIView *hengXian = [[UIView alloc]initWithFrame:FRAME(20, xieyiLab.bottom+30, SELF_VIEW_WIDTH-40, 1)];
-    hengXian.backgroundColor = [UIColor grayColor];
-    hengXian.alpha = 0.5;
-    [self.view addSubview:hengXian];
-    
-    UILabel *logLab = [[UILabel alloc]initWithFrame:FRAME(SELF_VIEW_WIDTH/2-40, xieyiLab.bottom+21, 80, 20)];
-    logLab.text = @"一 键 登 录";
-    logLab.textColor = [UIColor grayColor];
-    logLab.textAlignment = NSTextAlignmentCenter;
-    logLab.backgroundColor = HEX_TO_UICOLOR(BAC_VIEW_COLOR, 1.0);
-    logLab.font = [UIFont systemFontOfSize:13];
-    [self.view addSubview:logLab];
-    
-    NSArray *arr = [[NSArray alloc]initWithObjects:@"微信",@"logqq",@"logxinlang", nil];
-    
-    for (int i = 0 ; i < 3 ; i++) {
-        UIButton *thirdLogin = [[UIButton alloc]initWithFrame:FRAME(25+(i*120), xieyiLab.bottom+70, 25, 25)];
-        thirdLogin.tag = i;
-        [thirdLogin setImage:[UIImage imageNamed:arr[i]] forState:UIControlStateNormal];
-        thirdLogin.backgroundColor = [UIColor redColor];
-        [thirdLogin addTarget:self action:@selector(thirdLogin:) forControlEvents:UIControlEventTouchUpInside];
-        [thirdLogin setBackgroundColor:[UIColor clearColor]];
-        [self.view addSubview:thirdLogin];
         
+        UIView *hengXian = [[UIView alloc]initWithFrame:FRAME(20, xieyiLab.bottom+30, SELF_VIEW_WIDTH-40, 1)];
+        hengXian.backgroundColor = [UIColor grayColor];
+        hengXian.alpha = 0.5;
+        [self.view addSubview:hengXian];
         
-        if (i == 1||i == 2) {
-            thirdLogin.hidden = YES;
-        }else {
-            thirdLogin.frame = FRAME((SELF_VIEW_WIDTH - 30)/2, xieyiLab.bottom+70, 30, 30);
+        UILabel *logLab = [[UILabel alloc]initWithFrame:FRAME(SELF_VIEW_WIDTH/2-40, xieyiLab.bottom+21, 80, 20)];
+        logLab.text = @"一 键 登 录";
+        logLab.textColor = [UIColor grayColor];
+        logLab.textAlignment = NSTextAlignmentCenter;
+        logLab.backgroundColor = HEX_TO_UICOLOR(BAC_VIEW_COLOR, 1.0);
+        logLab.font = [UIFont systemFontOfSize:13];
+        [self.view addSubview:logLab];
+        
+        NSArray *arr = [[NSArray alloc]initWithObjects:@"微信",@"logqq",@"logxinlang", nil];
+        
+        for (int i = 0 ; i < 3 ; i++) {
+            UIButton *thirdLogin = [[UIButton alloc]initWithFrame:FRAME(25+(i*120), xieyiLab.bottom+70, 25, 25)];
+            thirdLogin.tag = i;
+            [thirdLogin setImage:[UIImage imageNamed:arr[i]] forState:UIControlStateNormal];
+            thirdLogin.backgroundColor = [UIColor redColor];
+            [thirdLogin addTarget:self action:@selector(thirdLogin:) forControlEvents:UIControlEventTouchUpInside];
+            [thirdLogin setBackgroundColor:[UIColor clearColor]];
+            [self.view addSubview:thirdLogin];
+            
+            
+            if (i == 1||i == 2) {
+                thirdLogin.hidden = YES;
+            }else {
+                thirdLogin.frame = FRAME((SELF_VIEW_WIDTH - 30)/2, xieyiLab.bottom+70, 30, 30);
+            }
         }
     }
-
+    
+    
+    
     
 }
 - (void)ThirdPartyLogSuccessWhitOpenID:(NSString *)openid type:(NSString *)type name:(NSString *)name headImgUrl:(NSString *)imgurl
 {
-
     DownloadManager *_download = [[DownloadManager alloc]init];
     NSDictionary *param = @{@"openid":openid,@"3rd_type":type,@"name":name,@"head_img":imgurl,@"login_from":@"0"};
     
     [_download requestWithUrl:Third_LOG dict:param view:self.view delegate:self finishedSEL:@selector(ThirdPardyLogSuccess:) isPost:YES failedSEL:@selector(DownFail:)];
-
+    [self back];
 }
 -(void)back
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.loginYesOrNo==YES) {
+        RootViewController *vc=[[RootViewController alloc]init];
+        [self.navigationController pushViewController:vc animated:YES];
+        
+    }
+    //[self.navigationController popViewControllerAnimated:YES];
 }
 - (void)ThirdPardyLogSuccess:(id)dict
 {
     int status = [[dict objectForKey:@"status"] intValue];
     NSDictionary *dataDic = [dict objectForKey:@"data"];
+    
+    //登陆后的信息
     if (status == 0) {
         NSString *userid = [dataDic objectForKey:@"id"];
         
@@ -226,7 +238,6 @@ appDelegate
         [mydefaults setObject:userid forKey:@"telephone"];
         [mydefaults synchronize];
         
-
         [self getUserInfo];
 //        [self dismissViewControllerAnimated:YES completion:nil];
         
@@ -265,13 +276,14 @@ appDelegate
 {
     ImgWebViewController *web = [[ImgWebViewController alloc]init];
     web.title = @"私秘使用协议";
-    web.imgurl = @" http://182.92.160.194/html/simi/agreement.htm";
+    web.imgurl = @" http://123.57.173.36/html/simi/agreement.htm";
     [self.navigationController pushViewController:web animated:YES];
     
 }
 - (void)thirdLogin:(UIButton *)sender
 {
     if (sender.tag == 0) {
+        wxID=1;
         [WeiXinPay sendAuthRequest];
         NSLog(@"微信登陆");
     }else if(sender.tag == 1)
@@ -334,6 +346,7 @@ appDelegate
     if (_tencentOAuth.accessToken && 0 != [_tencentOAuth.accessToken length])
     {
         //  记录登录用户的OpenID、Token以及过期时间
+        
         NSLog(@"%@腾讯登陆后的数据  token：%@ id:%@",_tencentOAuth.accessToken,_tencentOAuth.openId);
     }
     else
@@ -385,9 +398,11 @@ appDelegate
 }
 - (void)sureAction:(UIButton *)sender
 {
-    UITextField *textfield  = (UITextField *) [view viewWithTag:100];
-    UITextField *textfield1 = (UITextField *) [view viewWithTag:101];
     
+    UITextField *textfield  = (UITextField *) [view viewWithTag:100];
+    [textfield resignFirstResponder];
+    UITextField *textfield1 = (UITextField *) [view viewWithTag:101];
+    [textfield1 resignFirstResponder];
     if(textfield.text.length == 0){
         [MBProgressHUD showError:@"请输入手机号" toView:self.view];
         return;
@@ -398,9 +413,14 @@ appDelegate
     }
     NSLog(@"%@  ==== %@",textfield.text,textfield1.text);
     
+    
+    
+
     DownloadManager *_download = [[DownloadManager alloc]init];
     NSDictionary *_dict = @{@"mobile":textfield.text,@"sms_token":textfield1.text,@"login_from":@"1"};
     [_download requestWithUrl:LOGIN_API dict:_dict view:self.view delegate:self finishedSEL:@selector(logDownLoadFinish:) isPost:YES failedSEL:@selector(DownFail:)];
+//    RootViewController *vc=[[RootViewController alloc]init];
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark 登陆成功
@@ -408,10 +428,13 @@ appDelegate
 {
     NSLog(@"登录后信息：%@",string);
     
+    
+    
     SIMPLEBaseClass *_base = [[SIMPLEBaseClass alloc]initWithDictionary:string];
     
     
     if (_base.status  == 0) {
+        
         UITextField *textfield  = (UITextField *) [view viewWithTag:100];
         
         ISLoginManager *_logmanager = [ISLoginManager shareManager];
@@ -423,7 +446,8 @@ appDelegate
         [mydefaults synchronize];
         
         [self getUserInfo];
-        [self.navigationController popViewControllerAnimated:YES];
+        //[self.navigationController popViewControllerAnimated:YES];
+        
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"LOGIN_SUCCESS" object:textfield.text];
         
@@ -443,6 +467,7 @@ appDelegate
 //        }
 
     }
+    [self back];
     
 }
 
@@ -463,8 +488,16 @@ appDelegate
 - (void)getUserInfoSuccess:(id)dic
 {
     NSDictionary *dict = [dic objectForKey:@"data"];
+//    if (wxID==1) {
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"MylogVcBack" object:nil];
+//    }
+    
+    NSLog(@"这回会出来不？？%@",dict);
     int status = [dict[@"status"] intValue];
+    NSLog(@"hahahhahahah__+++++_____+++++___%@",dict);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"TONG_ZHI" object:dict];
     if (status == 0) {
+        
         //        UserData  = [[HuanxinBase alloc]initWithDictionary:dict];
         //        APPLIACTION.huanxinBase = UserData;
         //        NSLog(@"环信账号：%@环信密码：%@",UserData.imUsername,UserData.imUserPassword);
@@ -524,7 +557,7 @@ appDelegate
     ChatViewController *chatVC = [[ChatViewController alloc] initWithChatter:self.imToUserID isGroup:NO];
     chatVC.title = self.imToUserName;
     [chatVC.navigationController setNavigationBarHidden:NO];
-    [self.navigationController pushViewController:chatVC animated:YES];
+    //[self.navigationController pushViewController:chatVC animated:YES];
     
 }
 

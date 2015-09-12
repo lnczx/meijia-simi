@@ -19,6 +19,7 @@
 
 + (id)modelWithMessage:(EMMessage *)message
 {
+    
     id<IEMMessageBody> messageBody = [message.messageBodies firstObject];
     NSDictionary *userInfo = [[EaseMob sharedInstance].chatManager loginInfo];
     NSString *login = [userInfo objectForKey:kSDKUsername];

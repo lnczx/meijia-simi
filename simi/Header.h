@@ -47,7 +47,7 @@
 ////////////////*************************************//////////////////
 ////////////////*************接口相关*****************//////////////////
 
-#define SERVER_DRESS                     @"http://182.92.160.194/"                        //服务器地址
+#define SERVER_DRESS                     @"http://123.57.173.36/"                        //服务器地址
 #define GET_YANZHENGMA                   @"simi/app/user/get_sms_token.json"              //获取验证码
 #define LOGIN_API                        @"simi/app/user/login.json"                      //登录接口
 #define Third_LOG                        @"simi/app/user/login-3rd.json"                  //第三方登陆
@@ -93,4 +93,15 @@
 #define WXPAY_URL                        @"simi/app/order/wx_pre.json"                   //微信预支付接口
 #define WXPAY_SUCCESS                    @"simi/app/order/wx_order_query.json"           //查询微信支付是否成功
 #define UNREADMESSAGES                   @"simi/app/user/get_new_msg.json"               //查看有没有未读消息
+#define CREATE_CARD                      @"simi/app/card/post_card.json"                 //创建卡片接口
+#define CARD_LIST                        @"simi/app/card/get_list.json"                  //卡片列表接口
+#define CITY_JK                          @"simi/app/city/get_list.json"                  //城市数据接口
+#define CARD_DETAILS                     @"simi/app/card/get_detail.json"                //卡片详情接口
+#define CARD_PL                          @"simi/app/card/post_comment.json"              //卡片评论接口
+#define CARD_PLLB                        @"simi/app/card/get_comment_list.json"          //卡片评论列表接口
+#define CARD_DZ                          @"simi/app/card/post_zan.json"                  //卡片点赞接口
+#define USER_HYXX                        @"simi/app/user/get_im_last.json"               //好友消息列表接口
+#define USER_HYLB                        @"simi/app/user/get_friends.json"               //好友列表接口
+#define USER_TJHY                        @"simi/app/user/post_friend.json"               //添加好友接口
+#define USER_GRZY                        @"simi/app/user/get_user_index.json"            //用户个人主页接口
 #endif

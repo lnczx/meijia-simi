@@ -65,7 +65,7 @@
     NSMutableDictionary *sourceDic = [[NSMutableDictionary alloc]init];
     [sourceDic setObject:_manager.telephone  forKey:@"user_id"];
     [sourceDic setObject:[NSString stringWithFormat:@"%@",self.ordernumber] forKey:@"order_no"];
-    [sourceDic setObject:[NSString stringWithFormat:@"%d",selectstatus]  forKey:@"order_rate"];
+    [sourceDic setObject:[NSString stringWithFormat:@"%ld",(long)selectstatus]  forKey:@"order_rate"];
     [sourceDic setObject:content  forKey:@"order_rate_content"];
      NSLog(@"%@",sourceDic);
     

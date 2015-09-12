@@ -81,7 +81,10 @@
     
     return _ipSwitch;
 }
-
+-(void)useIpChanged:(UISwitch *)ada
+{
+    
+}
 - (UISwitch *)beInvitedSwitch
 {
 //    if (_beInvitedSwitch == nil) {

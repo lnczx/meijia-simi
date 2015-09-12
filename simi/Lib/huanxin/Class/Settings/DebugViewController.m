@@ -85,6 +85,7 @@
     {
         cell.textLabel.text = NSLocalizedString(@"setting.sdkVersion", @"SDK version");
         NSString *ver = [[EaseMob sharedInstance] sdkVersion];
+        
         cell.detailTextLabel.text = ver;
     }
     

@@ -58,7 +58,7 @@
     _usernameTextField.delegate = self;
     self.navigationController.navigationBarHidden = NO;
     self.title = NSLocalizedString(@"AppName", @"EaseMobDemo");
-    
+   
 //    [self loginWithUsername:userName password:password];
 //    [self loginWithUsername:@"" password:@""]; //进来就登录
 }

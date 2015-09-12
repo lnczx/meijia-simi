@@ -34,17 +34,17 @@
     switch (mytag) {
         case 100:
             self.navlabel.text = @"使用帮助";
-            _loadurl = @"html/simi/help.htm";
+            _loadurl = @"html/simi-inapp/help.htm";
             break;
             
         case 101:
             self.navlabel.text = @"用户协议";
-            _loadurl = @"html/simi/agreement.htm";
+            _loadurl = @"html/simi-inapp/agreement.htm";
             break;
 
         case 102:
             self.navlabel.text = @"关于我们";
-            _loadurl = @"html/simi/about-us.htm";
+            _loadurl = @"html/simi-inapp/about-us.htm";
             break;
 
             

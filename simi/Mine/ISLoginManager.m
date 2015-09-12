@@ -40,7 +40,7 @@ static ISLoginManager *manager = nil;
     }
     
     
-    _isLogin = isLogin;
+//    _isLogin = isLogin;
 }
 
 - (BOOL)isLogin
@@ -61,13 +61,14 @@ static ISLoginManager *manager = nil;
 - (void)setTelephone:(NSString *)telephone
 {
     _telephone = telephone;
+    NSLog( @"手机号%@",_telephone);
 }
 
 -(NSString *)telephone
 {
     NSUserDefaults *mydefaults = [NSUserDefaults standardUserDefaults];
     _telephone = [mydefaults objectForKey:@"telephone"];
-    
+    NSLog(@"有没有东西%@",_telephone);
     return _telephone;
 }
 

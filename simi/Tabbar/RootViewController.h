@@ -11,4 +11,5 @@
 @interface RootViewController : FatherViewController
 - (void)tabbarhiddenNO;
 - (void)tabbarhidden;
+@property (nonatomic, strong)UIView *tab;
 @end

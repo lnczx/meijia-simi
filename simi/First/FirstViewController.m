@@ -381,6 +381,7 @@
 }
 - (void)getUserInfoSuccess:(id)dic
 {
+    NSLog(@"这里可能是秘书的信息%@",dic);
     NSDictionary *dict = [dic objectForKey:@"data"];
     int status = [dict[@"status"] intValue];
     if (status == 0) {
@@ -414,6 +415,7 @@
     }
     if(status){
         NSLog(@"1");
+        
     }
 }
 
@@ -432,7 +434,7 @@
         btn.hidden = YES;
 //        
         ImgWebViewController *img = [[ImgWebViewController alloc]init];
-        img.imgurl = @"http://182.92.160.194/simi-wwz/wwz/news_list.html";
+        img.imgurl = @"http://123.57.173.36/simi-wwz/wwz/news_list.html";
         img.title = @"消息列表";
         [self.navigationController pushViewController:img animated:YES];
 //        

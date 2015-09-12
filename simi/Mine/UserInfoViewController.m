@@ -16,6 +16,8 @@
 #import "SettingsViewController.h"
 #import "MyAccountController.h"
 #import "MineViewController.h"
+
+#import "MyLogInViewController.h"
 @interface UserInfoViewController ()<userInfoDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate>
 {
     UserinfoView *_userview;
@@ -25,6 +27,10 @@
 @end
 
 @implementation UserInfoViewController
+-(void)viewWillAppear:(BOOL)animated
+{
+     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+}
 -(void) viewDidAppear:(BOOL)animated
 {
     NSString* cName = [NSString stringWithFormat:@"账号信息", nil];
@@ -121,7 +127,7 @@
             return;
         }
         
-        NSData *imgData = [GetPhoto getPhotoDataFromName:@"image.png"];
+        //NSData *imgData = [GetPhoto getPhotoDataFromName:@"image.png"];
         
         ISLoginManager *_manager = [ISLoginManager shareManager];
         
@@ -169,9 +175,10 @@
     [_default removeObjectForKey:@"telephone"];
     [_default removeObjectForKey:@"islogin"];
     [_default synchronize];
-    [self dismissViewControllerAnimated:YES completion:nil];
-//
-//    ISLoginManager *manager = [ISLoginManager shareManager];
+    MyLogInViewController *vc=[[MyLogInViewController alloc]init];
+    UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:vc];
+    [self presentViewController:nav animated:YES completion:nil];
+//    ISLoginManager *manager = [ISLoginManager shareManager]
 //    manager.isLogin = NO;
     
 }

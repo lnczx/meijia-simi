@@ -305,7 +305,7 @@
 }
 - (void)sureAction:(UIButton *)sender
 {
-    if (CommunityFiled.text.length>0 && menpaiField.text.length>0) {
+    if (CommunityFiled.text.length >0 && menpaiField.text.length>0) {
 
         NSString *menpai =(NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(nil, (CFStringRef)menpaiField.text, nil, (CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8));
         

@@ -9,7 +9,7 @@
 #ifndef simi_AppCommon_h
 #define simi_AppCommon_h
 
-#define NAV_COLOR 0xFF6535
+//#define NAV_COLOR 0xFF6535
 #define NAV_FONT_COLOR 0xFFFFFF
 #define INDEX_FONF_COLOR 0xC5C5C5
 #define TAB_FONT_COLOR 0xCCCCCC

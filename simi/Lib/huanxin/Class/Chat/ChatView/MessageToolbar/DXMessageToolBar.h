@@ -43,7 +43,7 @@
 - (void)recordButtonTouchUpOutside;
 - (void)willShowBottomView:(UIView *)bottomView;
 
-
+@property (strong, nonatomic) UIView *toolbarView;
 @property (nonatomic, weak) id <DXMessageToolBarDelegate> delegate;
 
 /**

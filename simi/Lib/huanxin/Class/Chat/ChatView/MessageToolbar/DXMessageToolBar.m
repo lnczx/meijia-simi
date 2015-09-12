@@ -28,11 +28,12 @@
 /**
  *  按钮、输入框、toolbarView
  */
-@property (strong, nonatomic) UIView *toolbarView;
+//@property (strong, nonatomic) UIView *toolbarView;
 @property (strong, nonatomic) UIButton *styleChangeButton;
 @property (strong, nonatomic) UIButton *moreButton;
 @property (strong, nonatomic) UIButton *faceButton;
 @property (strong, nonatomic) UIButton *recordButton;
+@property (strong, nonatomic) UIButton *voiceButton;
 
 /**
  *  底部扩展页面
@@ -43,7 +44,7 @@
 @end
 
 @implementation DXMessageToolBar
-
+int a=0;
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (frame.size.height < (kVerticalPadding * 2 + kInputTextViewMinHeight)) {
@@ -190,6 +191,7 @@
 - (void)textViewDidChange:(UITextView *)textView
 {
     [self willShowInputTextViewToHeight:[self getTextViewContentH:textView]];
+    
 }
 
 #pragma mark - DXFaceDelegate
@@ -328,6 +330,7 @@
     _inputTextView.layer.cornerRadius = 6.0f;
     _previousTextViewContentHeight = [self getTextViewContentH:_inputTextView];
     
+    
     //录制
     self.recordButton = [[UIButton alloc] initWithFrame:CGRectMake(textViewLeftMargin, kVerticalPadding, width, kInputTextViewMinHeight)];
     self.recordButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
@@ -361,6 +364,12 @@
         self.recordView = [[DXRecordView alloc] initWithFrame:CGRectMake(90, 130, 140, 140)];
     }
     
+    //语音按钮
+//    _voiceButton=[[UIButton alloc]initWithFrame:_inputTextView.frame];
+//    [_voiceButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+//    _voiceButton.backgroundColor=[UIColor redColor];
+//    _inputTextView.hidden=YES;
+//    [_toolbarView addSubview:_voiceButton];
     [self.toolbarView addSubview:self.styleChangeButton];
     [self.toolbarView addSubview:self.moreButton];
     [self.toolbarView addSubview:self.faceButton];
@@ -494,7 +503,12 @@
     switch (tag) {
         case 0://切换状态
         {
-            if (button.selected) {
+            if (a%2==0) {
+                //键盘也算一种底部扩展页面
+                [self.inputTextView becomeFirstResponder];
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"TOUCHRECORD_JP" object:nil];
+            }
+            else{
                 self.faceButton.selected = NO;
                 self.moreButton.selected = NO;
                 //录音状态下，不显示底部扩展页面
@@ -502,16 +516,12 @@
                 
                 //将inputTextView内容置空，以使toolbarView回到最小高度
                 self.inputTextView.text = @"";
-//                [self textViewDidChange:self.inputTextView];
+                //                [self textViewDidChange:self.inputTextView];
                 [self.inputTextView resignFirstResponder];
                 
                 
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"TOUCHRECORD" object:nil];
-                
-            }
-            else{
-                //键盘也算一种底部扩展页面
-                [self.inputTextView becomeFirstResponder];
+               
             }
             
             [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -524,6 +534,7 @@
             if ([self.delegate respondsToSelector:@selector(didStyleChangeToRecord:)]) {
                 [self.delegate didStyleChangeToRecord:button.selected];
             }
+            a++;
         }
             break;
         case 1://表情

@@ -24,5 +24,6 @@
 }
 
 @property (nonatomic, weak) id<TixingTimePic>delegate;
+@property (nonatomic ,retain) UIDatePicker *datePicker;
 
 @end

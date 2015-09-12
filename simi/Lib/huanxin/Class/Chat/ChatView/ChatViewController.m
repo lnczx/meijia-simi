@@ -81,6 +81,11 @@
     IFlyTextUnderstander * underStand;
     ChatOrderView *orderView ;
     ChatModel *chatmodel;
+    
+    DXMessageToolBar *dx;
+    
+    UIButton *voiceButton;
+    int voiceId;
 }
 
 @property (nonatomic) BOOL isChatGroup;
@@ -123,11 +128,10 @@
     
     return self;
 }
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    NSLog(@"聊天界面的标题%@",self.title);
     self.navigationController.navigationBarHidden = NO;
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15],NSForegroundColorAttributeName:[UIColor blackColor]}];
     [self registerBecomeActive];
@@ -152,6 +156,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(insertCallMessage:) name:@"insertCallMessage" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidEnterBackground) name:@"applicationDidEnterBackground" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(touchRecord) name:@"TOUCHRECORD" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(touchRecord_jp) name:@"TOUCHRECORD_JP" object:nil];
     
     _messageQueue = dispatch_queue_create("easemob.com", NULL);
     _isScrollToBottom = YES;
@@ -200,7 +205,7 @@
 }
 - (void)ReadMessagesFinish:(id)dict
 {
-    NSLog(@"dict : %@",dict);
+    NSLog(@"dict: %@",dict);
     
     UIButton *btn = (UIButton *)[self.navigationController.navigationBar viewWithTag:321];
     
@@ -226,6 +231,7 @@
 //创建三个按钮
 - (void)bottomThreeBtn
 {
+    self.chatToolBar.hidden = NO;
     UIButton *btn = [[UIButton alloc]initWithFrame:FRAME(SELF_VIEW_WIDTH/2-40, SELF_VIEW_HEIGHT-100-60, 80, 80)];
     btn.tag = 600;
     [btn setBackgroundImage:[UIImage imageNamed:@"calling-btn"] forState:UIControlStateNormal];
@@ -236,7 +242,7 @@
 //    [btn addTarget:self action:@selector(recordButtonTouchUpOutside) forControlEvents:UIControlEventTouchUpInside];
     [btn addTarget:self action:@selector(touchOutsideRecord) forControlEvents:UIControlEventTouchUpOutside];
 //    [btn addTarget:self action:@selector(stopRecordAdiou) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btn];
+    //[self.view addSubview:btn];
     
     
     UIButton *leftBtn = [[UIButton alloc]initWithFrame:FRAME((SELF_VIEW_WIDTH/2-40)/2-20, SELF_VIEW_HEIGHT-100-30, 40, 40)];
@@ -245,7 +251,7 @@
     [leftBtn.layer setCornerRadius:20];
     [leftBtn setImage:[UIImage imageNamed:@"left_text"] forState:UIControlStateNormal];
     [leftBtn addTarget:self action:@selector(leftBtn) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:leftBtn];
+    //[self.view addSubview:leftBtn];
     
     UIButton *rightBtn = [[UIButton alloc]initWithFrame:FRAME((SELF_VIEW_WIDTH/2)+(SELF_VIEW_WIDTH/2)/2,  SELF_VIEW_HEIGHT-100-30, 40, 40)];
     rightBtn.tag = 602;
@@ -253,8 +259,28 @@
 //    [rightBtn setBackgroundColor:[UIColor redColor]];
     [rightBtn addTarget:self action:@selector(rightBtnAction) forControlEvents:UIControlEventTouchUpInside];
     [rightBtn.layer setCornerRadius:20];
-    [self.view addSubview:rightBtn];
+    //[self.view addSubview:rightBtn];
     
+    voiceButton=[[UIButton alloc]initWithFrame:FRAME(50, 5, WIDTH-144, 36)];
+    [voiceButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+    voiceButton.backgroundColor=[UIColor whiteColor];
+    voiceButton.layer.cornerRadius=8;
+    [voiceButton.layer setMasksToBounds:YES];
+    [voiceButton.layer setCornerRadius:7.0]; //设置矩圆角半径
+    [voiceButton.layer setBorderWidth:1.0];   //边框宽度
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGColorRef colorref = CGColorCreate(colorSpace,(CGFloat[]){ 1, 0, 0, 1 });
+    [voiceButton.layer setBorderColor:colorref];//边框颜色
+    
+    [voiceButton addTarget:self action:@selector(startRecordAdiou) forControlEvents:UIControlEventTouchDown];
+    [voiceButton addTarget:self action:@selector(stopRecordAdiou) forControlEvents:UIControlEventTouchUpInside];
+    //    [btn addTarget:self action:@selector(recordButtonTouchUpOutside) forControlEvents:UIControlEventTouchUpInside];
+    [voiceButton addTarget:self action:@selector(touchOutsideRecord) forControlEvents:UIControlEventTouchUpOutside];
+    UILabel *label=[[UILabel alloc]initWithFrame:FRAME(0, 0, voiceButton.frame.size.width, voiceButton.frame.size.height)];
+    label.text=@"按住 说话";
+    label.textAlignment=NSTextAlignmentCenter;
+    [voiceButton addSubview:label];
+    [self.chatToolBar addSubview:voiceButton];
     UILabel *lable = [[UILabel alloc]initWithFrame:FRAME(20, 100, self.view.width-40, 100)];
     lable.tag = 700;
     lable.text = @"嗨~~终于等到你！\r我是你的私人小秘哦，\r有事只管吩咐，按住说话就行!";
@@ -298,20 +324,27 @@
     rightBtn.hidden = YESorNO;
     
 }
+#pragma mark tableviw坐标位置|||||||||\\\\\\\\\\||||||||||
 - (void)touchRecord
 {
     [self hideThreeBtn:NO];
     
-    [self.chatToolBar setHidden:YES];
+    [self.chatToolBar setHidden:NO];
     
     _tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - self.chatToolBar.frame.size.height-80);
 
     if (_isScrollToBottom) {
+        voiceButton.hidden=NO;
         [self scrollViewToBottom:YES];
     }
     else{
+        voiceButton.hidden=YES;
         _isScrollToBottom = YES;
     }
+}
+- (void)touchRecord_jp
+{
+    voiceButton.hidden=YES;
 }
 
 - (void)leftBtn
@@ -406,6 +439,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    voiceId=0;
     self.navigationController.navigationBarHidden = NO;
     [super viewWillAppear:animated];
     
@@ -434,9 +468,9 @@
 
 - (void)dealloc
 {
-    _tableView.delegate = nil;
-    _tableView.dataSource = nil;
-    _tableView = nil;
+//    _tableView.delegate = nil;
+//    _tableView.dataSource = nil;
+//    _tableView = nil;
     
     _slimeView.delegate = nil;
     _slimeView = nil;
@@ -540,7 +574,7 @@
     
     return _slimeView;
 }
-
+#pragma mark   tableView初始化方法$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 - (UITableView *)tableView
 {
     if (_tableView == nil) {
@@ -618,6 +652,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    NSLog(@"self.dataSource.count   %lu",(unsigned long)self.dataSource.count);
     return self.dataSource.count;
 }
 
@@ -675,10 +710,11 @@
 {
     NSObject *obj = [self.dataSource objectAtIndex:indexPath.row];
     if ([obj isKindOfClass:[NSString class]]) {
-        return 40;
+        return 20;
     }
     else{
         return [EMChatViewCell tableView:tableView heightForRowAtIndexPath:indexPath withObject:(MessageModel *)obj];
+        
     }
 }
 
@@ -1209,7 +1245,7 @@
     [self addMessage:locationMessage];
 }
 
-#pragma mark - DXMessageToolBarDelegate
+#pragma mark - DXMessageToolBarDelegate键盘弹出＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 - (void)inputTextViewWillBeginEditing:(XHMessageTextView *)messageInputTextView{
     [_menuController setMenuItems:nil];
 }
@@ -1892,6 +1928,8 @@
 
 -(NSMutableArray *)formatMessage:(EMMessage *)message
 {
+    [UIView beginAnimations: @"Animation" context:nil];
+        [UIView setAnimationDuration:0.5];
     NSMutableArray *ret = [[NSMutableArray alloc] init];
     NSDate *createDate = [NSDate dateWithTimeIntervalInMilliSecondSince1970:(NSTimeInterval)message.timestamp];
     NSTimeInterval tempDate = [createDate timeIntervalSinceDate:self.chatTagDate];
@@ -1904,13 +1942,12 @@
     if (model) {
         [ret addObject:model];
     }
-    
+    [UIView commitAnimations];
     return ret;
 }
 
 -(void)addMessage:(EMMessage *)message
 {
-    
     __weak ChatViewController *weakSelf = self;
     dispatch_async(_messageQueue, ^{
         NSArray *messages = [weakSelf formatMessage:message];
@@ -1933,13 +1970,19 @@
     });
     [self scrollViewToBottom:YES];
 }
+#pragma mark  这里是发送消息后向上移动的地方＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 - (void)scrollViewToBottom:(BOOL)animated
 {
+
     if (self.tableView.contentSize.height > self.tableView.frame.size.height)
     {
-        CGPoint offset = CGPointMake(0, self.tableView.contentSize.height - self.tableView.frame.size.height+50);
-        [self.tableView setContentOffset:offset animated:YES];
+        [UIView beginAnimations: @"Animation" context:nil];
+        [UIView setAnimationDuration:0.5];
+        CGPoint offset = CGPointMake(0, self.tableView.contentSize.height - self.tableView.frame.size.height);
+        [self.tableView setContentOffset:offset animated:NO];
+        
+        [UIView commitAnimations];
     }
 }
 
@@ -1966,7 +2009,7 @@
     btn.hidden = YES;
     
     ISLoginManager *manager = [[ISLoginManager alloc]init];
-    NSString *url = [NSString stringWithFormat:@"http://182.92.160.194/simi-wwz/wx-news-list.html?user_id=%@&page=1",manager.telephone];
+    NSString *url = [NSString stringWithFormat:@"http://123.57.173.36/simi-wwz/wx-news-list.html?user_id=%@&page=1",manager.telephone];
     ImgWebViewController *img = [[ImgWebViewController alloc]init];
     img.imgurl =url;
     img.title = @"消息列表";
@@ -2036,6 +2079,7 @@
 {
     [self.navigationController popToViewController:self animated:NO];
     [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 - (void)insertCallMessage:(NSNotification *)notification

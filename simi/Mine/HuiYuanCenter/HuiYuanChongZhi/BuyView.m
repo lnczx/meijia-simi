@@ -178,9 +178,10 @@
             _yuelabel.textAlignment = NSTextAlignmentRight;
             [self addSubview:_yuelabel];
             
-            for (int i = 0; i < 2; i ++) {
+            for (int i = 0; i < 3; i ++) {
                 UIButton *_selectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                _selectBtn.frame = FRAME(_CELL_WIDTH-18-23, 31+54*num+46+15+54*i, 23, 23);
+                _selectBtn.height=YES;
+                _selectBtn.frame = FRAME(_CELL_WIDTH-18-23, 36+54*num+54*i, 23, 23);
                 if (i == 0) {
                     [_selectBtn setImage:[UIImage imageNamed:@"selection_checked"] forState:UIControlStateNormal];
 
@@ -212,7 +213,28 @@
     
     return self;
 }
-
+//- (void)ZfbPaySelect
+//{
+//    NSLog(@"支付宝支付");
+//    UIImageView *view = (UIImageView *)[self viewWithTag:33];
+//    UIImageView *view2 = (UIImageView *)[self viewWithTag:44];
+//
+//    view.image = [UIImage imageNamed:@"selection-checked"];
+//    view2.image = [UIImage imageNamed:@"selection"];
+//    ZFB = YES;
+//    
+//    
+//}
+//- (void)WxPaySelect
+//{
+//    NSLog(@"微信支付");
+//    UIImageView *view = (UIImageView *)[self viewWithTag:33];
+//    UIImageView *view2 = (UIImageView *)[self viewWithTag:44];
+//    
+//    view.image = [UIImage imageNamed:@"selection"];
+//    view2.image = [UIImage imageNamed:@"selection-checked"];
+//    ZFB = NO;
+//}
 - (void)ZfbPaySelect
 {
     NSLog(@"支付宝支付");
@@ -222,19 +244,20 @@
     view.image = [UIImage imageNamed:@"selection-checked"];
     view2.image = [UIImage imageNamed:@"selection"];
     ZFB = YES;
-    
-    
+
+
 }
 - (void)WxPaySelect
 {
     NSLog(@"微信支付");
     UIImageView *view = (UIImageView *)[self viewWithTag:33];
     UIImageView *view2 = (UIImageView *)[self viewWithTag:44];
-    
+
     view.image = [UIImage imageNamed:@"selection"];
     view2.image = [UIImage imageNamed:@"selection-checked"];
     ZFB = NO;
 }
+
 - (void)setSelfmoney:(NSString *)selfmoney
 {
     UILabel *_label = (UILabel *)[self viewWithTag:190];
@@ -248,22 +271,30 @@
 
 - (void)SelectOrNo:(UIButton *)sender
 {
+    
+    NSLog(@"谁会走这里呢？");
     [sender setImage:[UIImage imageNamed:@"selection_checked"] forState:UIControlStateNormal];
     UIButton *_button = (UIButton *)[self viewWithTag:3000];
     UIButton *_button1 = (UIButton *)[self viewWithTag:3001];
+    UIButton *_button2 = (UIButton *)[self viewWithTag:3002];
     
     if (sender.tag == 3000) {
-        
-        isAli = YES;
-        
+        ZFB=YES;
+        isAli=NO;
         [_button1 setImage:[UIImage imageNamed:@"noselection"] forState:UIControlStateNormal];
-    }else{
-        
-        isAli = NO;
-        
-        
+        [_button2 setImage:[UIImage imageNamed:@"noselection"] forState:UIControlStateNormal];
+    }else if(sender.tag==3001){
+        ZFB=NO;
+        isAli=NO;
         [_button setImage:[UIImage imageNamed:@"noselection"] forState:UIControlStateNormal];
+        [_button2 setImage:[UIImage imageNamed:@"noselection"] forState:UIControlStateNormal];
 
+    }else
+    {
+        ZFB=NO;
+        isAli=YES;
+        [_button setImage:[UIImage imageNamed:@"noselection"] forState:UIControlStateNormal];
+        [_button1 setImage:[UIImage imageNamed:@"noselection"] forState:UIControlStateNormal];
     }
 
 }
@@ -287,7 +318,6 @@
     _label.text = jine;
 
 }
-
 - (NSString *)jine
 {
     return _jine;
@@ -305,5 +335,4 @@
 {
     return _fanxian;
 }
-
 @end

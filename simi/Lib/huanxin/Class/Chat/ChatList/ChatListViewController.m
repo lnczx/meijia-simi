@@ -244,7 +244,7 @@
 {
     NSInteger ret = 0;
     ret = conversation.unreadMessagesCount;
-    
+    NSLog(@"没有度过的消息个数%ld",(long)ret);
     return  ret;
 }
 

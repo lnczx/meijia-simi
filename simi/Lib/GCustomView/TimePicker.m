@@ -37,7 +37,7 @@
         [view addSubview:queding];
         
         UILabel *lable = [[UILabel alloc]initWithFrame:FRAME(16, 10, self_Width-32, 20)];
-        lable.text = @"提醒时间";
+        lable.text = @"提醒设置";
         lable.textAlignment = NSTextAlignmentCenter;
         lable.textColor = HEX_TO_UICOLOR(ROUND_TITLE_COLOR, 1.0);
         lable.font = [UIFont systemFontOfSize:13];
@@ -55,40 +55,41 @@
         
         
         
-        UILabel *hlable = [[UILabel alloc]initWithFrame:FRAME(110, 80, self_Width-32, 20)];
-        hlable.text = @"点";
-        hlable.textAlignment = NSTextAlignmentLeft;
-        hlable.textColor = HEX_TO_UICOLOR(ROUND_TITLE_COLOR, 1.0);
-        hlable.font = [UIFont systemFontOfSize:13];
-        [pickerView addSubview:hlable];
-        
-        UILabel *mlable = [[UILabel alloc]initWithFrame:FRAME(self_Width-50, 80, self_Width-32, 20)];
-        mlable.text = @"分";
-        mlable.textAlignment = NSTextAlignmentLeft;
-        mlable.textColor = HEX_TO_UICOLOR(ROUND_TITLE_COLOR, 1.0);
-        mlable.font = [UIFont systemFontOfSize:13];
-        [pickerView addSubview:mlable];
+//        UILabel *hlable = [[UILabel alloc]initWithFrame:FRAME(110, 80, self_Width-32, 20)];
+//        hlable.text = @"点";
+//        hlable.textAlignment = NSTextAlignmentLeft;
+//        hlable.textColor = HEX_TO_UICOLOR(ROUND_TITLE_COLOR, 1.0);
+//        hlable.font = [UIFont systemFontOfSize:13];
+//        [pickerView addSubview:hlable];
+//        
+//        UILabel *mlable = [[UILabel alloc]initWithFrame:FRAME(self_Width-50, 80, self_Width-32, 20)];
+//        mlable.text = @"分";
+//        mlable.textAlignment = NSTextAlignmentLeft;
+//        mlable.textColor = HEX_TO_UICOLOR(ROUND_TITLE_COLOR, 1.0);
+//        mlable.font = [UIFont systemFontOfSize:13];
+//        [pickerView addSubview:mlable];
         
         //  pickerView.hidden = YES;
-        hoursArray = [[NSMutableArray alloc]init];
+        hoursArray = @[@"不提醒",@"按时提醒",@"提前5分钟",@"提前15分钟",@"提前30分钟",@"提前1小时",@"提前2小时",@"提前6小时",@"提前1天",@"提前2天"];
+    
         MinutesArray = [[NSMutableArray alloc]init];
         
-        for (int i = 0; i < 24; i++) {
-            if(i<10){
-                [hoursArray addObject:[NSString stringWithFormat:@"0%d",i]];
-            }else{
-                [hoursArray addObject:[NSString stringWithFormat:@"%d",i]];
-            }
- 
-        }
-        for (int i = 0; i < 60; i++) {
-            if(i<10){
-                [MinutesArray addObject:[NSString stringWithFormat:@"0%d",i]];
-            }else{
-                [MinutesArray addObject:[NSString stringWithFormat:@"%d",i]];
-            }
- 
-        }
+//        for (int i = 0; i < 24; i++) {
+//            if(i<10){
+//                [hoursArray addObject:[NSString stringWithFormat:@"0%d",i]];
+//            }else{
+//                [hoursArray addObject:[NSString stringWithFormat:@"%d",i]];
+//            }
+// 
+//        }
+//        for (int i = 0; i < 60; i++) {
+//            if(i<10){
+//                [MinutesArray addObject:[NSString stringWithFormat:@"0%d",i]];
+//            }else{
+//                [MinutesArray addObject:[NSString stringWithFormat:@"%d",i]];
+//            }
+// 
+//        }
         
     }
     return self;
@@ -103,15 +104,17 @@
     
     
     NSInteger row = [pickerView selectedRowInComponent:0];
+   // NSLog(@"%ld",(long)row);
+    //NSInteger row1 = [pickerView selectedRowInComponent:1];
+    self.txRow=row;
+    [self.delegate hours:[hoursArray objectAtIndex:row]];
     
-    NSInteger row1 = [pickerView selectedRowInComponent:1];
     
-    [self.delegate hours:[hoursArray objectAtIndex:row] minutes:[MinutesArray objectAtIndex:row1]];
 }
 //返回显示的列数
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-    return 2;
+    return 1;
 }
 //返回当前列显示的行数
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
@@ -121,8 +124,6 @@
         
         case 0:
             return [hoursArray count];
-        case 1:
-            return [MinutesArray count];
     }
     return 0;
 }
@@ -134,9 +135,8 @@
     switch (component){
         
         case 0:
+            
             return [hoursArray objectAtIndex:row];
-        case 1:
-            return [MinutesArray objectAtIndex:row];
     }
     return nil;
     

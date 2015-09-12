@@ -26,7 +26,7 @@
 @synthesize navlabel = _navlabel;
 @synthesize backBtn = _backBtn;
 @synthesize backlable = _backlable;
-@synthesize hxPassword,hxUserName,imToUserID,imToUserName,ID;
+@synthesize hxPassword,hxUserName,imToUserID,imToUserName,ID,_backLable;
 - (void)viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBarHidden = YES;
@@ -36,9 +36,9 @@
 
     self.view.backgroundColor = HEX_TO_UICOLOR(BAC_VIEW_COLOR, 1.0);
     
-    UILabel *backlable = [[UILabel alloc]initWithFrame:FRAME(0, 0, SELF_VIEW_WIDTH, NAV_HEIGHT)];
-    backlable.backgroundColor = HEX_TO_UICOLOR(0xf9f9f9, 1.0);
-    [self.view addSubview:backlable];
+    _backLable = [[UILabel alloc]initWithFrame:FRAME(0, 0, SELF_VIEW_WIDTH, NAV_HEIGHT)];
+    _backLable.backgroundColor = HEX_TO_UICOLOR(0xf9f9f9, 1.0);
+    [self.view addSubview:_backLable];
     
     _navlabel = [[UILabel alloc]initWithFrame:CGRectMake(50, 20, self.view.frame.size.width-100, 44)];
     _navlabel.backgroundColor = HEX_TO_UICOLOR(0xf9f9f9, 1.0);
@@ -47,10 +47,10 @@
     _navlabel.textColor = [UIColor blackColor];
     [self.view addSubview:_navlabel];
     
-    UILabel *lable = [[UILabel alloc]initWithFrame:FRAME(0, 63, SELF_VIEW_WIDTH, 1)];
-    lable.backgroundColor = [UIColor grayColor];
-    lable.alpha = 0.3;
-    [self.view addSubview:lable];
+    _lineLable = [[UILabel alloc]initWithFrame:FRAME(0, 63, SELF_VIEW_WIDTH, 1)];
+    _lineLable.backgroundColor = [UIColor grayColor];
+    _lineLable.alpha = 0.3;
+    [self.view addSubview:_lineLable];
 
     _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _backBtn.frame = FRAME(0, 20, 60, 40);
@@ -65,11 +65,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(openWebView:) name:@"OPENWEBVIEW" object:nil];
     
 }
-- (void)hideTabbar
-{
-    RootViewController *rot = [[RootViewController alloc]init];
-    [rot tabbarhidden];
-}
+//- (void)hideTabbar
+//{
+//    RootViewController *rot = [[RootViewController alloc]init];
+//    [rot tabbarhidden];
+//}
 - (void)backAction
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -87,7 +87,7 @@
     ISLoginManager *manager = [[ISLoginManager alloc]init];
     if (![url isEqualToString:@""]&& url !=nil) {
           url = [NSString stringWithFormat:
-                            @"http://182.92.160.194/simi-oa/upload/html/%@.html?mobile='%@'",
+                            @"http://123.57.173.36/simi-oa/upload/html/%@.html?mobile='%@'",
                              [obj.object objectForKey:@"msgid"],
                              manager.telephone];
 //        url = [NSString stringWithFormat:@"%@%@",[obj.object objectForKey:@"url"],mobile];

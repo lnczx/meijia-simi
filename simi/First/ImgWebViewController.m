@@ -15,6 +15,10 @@
 
 @implementation ImgWebViewController
 @synthesize imgurl,title;
+-(void)viewWillAppear:(BOOL)animated
+{
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -22,7 +26,8 @@
     
 
 APPLIACTION.leiName = @"";
-    [self hideTabbar];
+//    [self hideTabbar];
+    
     
     UIWebView *webView = [[UIWebView alloc]initWithFrame:FRAME(0, 64, self.view.bounds.size.width, self.view.bounds.size.height-64)];
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",imgurl]];

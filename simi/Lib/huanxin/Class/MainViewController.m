@@ -206,7 +206,7 @@ static const CGFloat kDefaultPlaySoundInterval = 3.0;
             _chatListVC.tabBarItem.badgeValue = nil;
         }
     }
-    
+    NSLog(@"没有读过的消息数%ld",(long)unreadCount);
     UIApplication *application = [UIApplication sharedApplication];
     [application setApplicationIconBadgeNumber:unreadCount];
 }

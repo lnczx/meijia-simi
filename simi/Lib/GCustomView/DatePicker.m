@@ -37,7 +37,7 @@
         [view addSubview:queding];
         
         UILabel *lable = [[UILabel alloc]initWithFrame:FRAME(16, 10, self_Width-32, 20)];
-        lable.text = @"提醒日期";
+        lable.text = @"出发日期";
         lable.textAlignment = NSTextAlignmentCenter;
         lable.textColor = HEX_TO_UICOLOR(ROUND_TITLE_COLOR, 1.0);
         lable.font = [UIFont systemFontOfSize:13];

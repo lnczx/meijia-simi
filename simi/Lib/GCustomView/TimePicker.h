@@ -12,7 +12,7 @@
 
 - (void)suanle;
 
-- (void)hours:(NSString *)hours minutes:(NSString *)minutes;
+- (void)hours:(NSString *)hours ;//minutes:(NSString *)minutes;
 
 @end
 
@@ -21,11 +21,11 @@
     __weak id<timePickerDelegate>_delegate;
     
     UIPickerView *pickerView;
-    NSMutableArray *hoursArray;
+    NSArray *hoursArray;
     NSMutableArray *MinutesArray;
 
 }
-
+@property (nonatomic, assign)NSInteger txRow;
 @property (nonatomic, weak)  id<timePickerDelegate>delegate;
 
 @end

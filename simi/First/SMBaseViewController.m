@@ -25,13 +25,18 @@
     UITableView *_myTableView;
     NSMutableArray *_dataArray;
     int pages;
+    NSArray *dataArray;
 }
 @end
 
 @implementation SMBaseViewController
 - (void)viewWillAppear:(BOOL)animated
 {
+//    [self.view removeFromSuperview];
     APPLIACTION.leiName = @"66";
+    //[self viewDidLoad];
+    
+    
     
 }
 - (void)viewWillDisappear:(BOOL)animated
@@ -78,8 +83,10 @@
 - (void)getUserInfoSuccess:(id)dic
 {
     NSDictionary *dict = [dic objectForKey:@"data"];
+    NSLog(@"自动登录的时候湖区的数据%@",dict);
     int status = [dict[@"status"] intValue];
     if (status == 0) {
+        
         //        UserData  = [[HuanxinBase alloc]initWithDictionary:dict];
         //        APPLIACTION.huanxinBase = UserData;
         //        NSLog(@"环信账号：%@环信密码：%@",UserData.imUsername,UserData.imUserPassword);
@@ -155,11 +162,27 @@
 }
 - (void)MaketwoImage
 {
+    NSError *error;
+    NSURL *url=[NSURL URLWithString:@"http://123.57.173.36/simi/app/dict/get_ads.json"];
+    NSData *data=[NSData dataWithContentsOfURL:url];
+    NSLog( @"能否接收到数据？？%@",data);
+    NSStringEncoding enc=CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
+    NSString *str=[[NSString alloc]initWithData:data encoding:enc];
+    NSData *rootData=[str dataUsingEncoding:enc];
+    NSDictionary *dic=[NSJSONSerialization JSONObjectWithData:rootData options:NSJSONReadingMutableLeaves error:&error];
+    dataArray=[dic objectForKey:@"data"];
+    
+    //NSString *string=[dataDic objectForKey:@""];
+    
     CGFloat imgWidth = (SELF_VIEW_WIDTH-20)/2;
     
     NSArray *imgarr = [NSArray arrayWithObjects:@"SM_base_banner1",@"SM_base_Banner2", nil];
     
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < dataArray.count; i++) {
+        NSDictionary *daDic=dataArray[i];
+        NSString *url=[daDic objectForKey:@"img_url"];
+        NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+        NSLog(@"是否转化成字典？？？%@",daDic);
         UIImageView *imageView = [[UIImageView alloc]initWithFrame:FRAME(10+(i*(imgWidth+5)), _navlabel.bottom+5, imgWidth-5, 122)];
         
         imageView.backgroundColor = i == 0? [UIColor redColor]:[UIColor greenColor];
@@ -167,15 +190,28 @@
         imageView.layer.masksToBounds = YES;
         
         [imageView.layer setCornerRadius:3];
-        
-        imageView.image = [UIImage imageNamed:imgarr[i]];
-        
+        UIImage *image=[UIImage imageWithData:data];
+        imageView.image = image;
+        [imageView setTag:(100+i)];
+        imageView.userInteractionEnabled = YES;
         [self.view addSubview:imageView];
+        UITapGestureRecognizer *tapImage=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageViewTap:)];
+        [imageView addGestureRecognizer:tapImage];
 
     }
 
 }
-
+-(void)imageViewTap:(UITapGestureRecognizer *)sender
+{
+    long i=(sender.view.tag-100);
+    NSDictionary *dic=dataArray[i];
+    NSString *url=[dic objectForKey:@"goto_url"];
+    ImgWebViewController *web = [[ImgWebViewController alloc]init];
+    web.imgurl = url;
+    NSLog( @"URL%@",url);
+    [self.navigationController pushViewController:web animated:YES];
+    
+}
 - (void)readMessage:(UIButton *)sender
 {
     UIButton *btn = (UIButton *)[rightbtn viewWithTag:321];
@@ -186,7 +222,7 @@
     [user synchronize];
     
     ISLoginManager *manager = [[ISLoginManager alloc]init];
-    NSString *url = [NSString stringWithFormat:@"http://182.92.160.194/simi-wwz/wx-news-list.html?user_id=%@&page=1",manager.telephone];
+    NSString *url = [NSString stringWithFormat:@"http://123.57.173.36/simi-wwz/wx-news-list.html?user_id=%@&page=1",manager.telephone];
     ImgWebViewController *img = [[ImgWebViewController alloc]init];
     img.imgurl =url;
     img.title = @"消息列表";

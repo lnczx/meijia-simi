@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>1BB170EB-BF07-4A3B-B4B8-957C3026066A</string>
 	<key>IDESourceControlProjectName</key>
-	<string>simi</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>96E4A2F2CE23F7D6D595BFCF0A9F6133B8C2A202</key>
 		<string>https://github.com/lnczx/meijia-simi.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>simi.xcodeproj</string>
+	<string>simi.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>96E4A2F2CE23F7D6D595BFCF0A9F6133B8C2A202</key>

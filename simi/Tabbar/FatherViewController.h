@@ -25,15 +25,13 @@
 @property (nonatomic, strong)NSString *imToUserID;
 @property (nonatomic, strong)NSString *imToUserName;
 @property (nonatomic, strong)NSString *ID;
+@property (nonatomic, strong)UILabel *lineLable;
 
-
+@property (nonatomic, strong)UILabel *_backLable;
 
 - (void)showAlertViewWithTitle:(NSString *)title
                        message:(NSString *)message;
 
-- (void)backAction;
-
-- (void)hideTabbar;
 
 - (void)pushToIM;
 

@@ -14,7 +14,7 @@
     NSDateFormatter *dateFormatter;
 }
 
-@synthesize delegate = _delegate;
+@synthesize datePicker,delegate = _delegate;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -44,7 +44,7 @@
         [view addSubview:queding];
         
         UILabel *lable = [[UILabel alloc]initWithFrame:FRAME(16, 10, self_Width-32, 20)];
-        lable.text = @"提醒时间";
+        lable.text = @"出发时间";
         lable.textAlignment = NSTextAlignmentCenter;
         lable.textColor = HEX_TO_UICOLOR(ROUND_TITLE_COLOR, 1.0);
         lable.font = [UIFont systemFontOfSize:13];
@@ -71,6 +71,7 @@
         
         //设置中文显示
         NSLocale * locale = [[NSLocale alloc] initWithLocaleIdentifier:@"Chinese"];
+        //NSLog(@"152615174147%@",dateFormatter);
         [datePicker setLocale:locale];
         
         //显示任务的时间。
@@ -117,7 +118,7 @@
     
     NSString *s = [dateFormatter stringFromDate:selected];
 
-    NSString *str2 = [s substringWithRange:NSMakeRange(11, 5)];
+    NSString *str2 = [s substringWithRange:NSMakeRange(11, 8)];
     
     NSLog(@"确定  date = %@",str2);
     
